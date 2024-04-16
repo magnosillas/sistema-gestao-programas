@@ -155,6 +155,7 @@ Route::prefix('edital')->group(function () {
     Route::get('/{fileName}/historico-escolar', [EditalController::class, 'download_historico_escolares_alunos'])->name('historico_escolar.download');
     Route::get('/{fileName}/comprovante-bancario', [EditalController::class, 'download_comprovante_bancario'])->name('comprovante_bancario.download');
     Route::get('/{fileName}/frequencia_mensal', [EditalController::class, 'download_frequencia_mensal'])->name('frequencia.download');
+    Route::get('/{edital_id}/emitir_certificado', [EditalController::class, 'emitir_certificados'])->name('edital.emitir_certificados');
 });
 
 // Rotas de Disciplina

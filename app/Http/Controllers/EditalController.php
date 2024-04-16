@@ -898,5 +898,58 @@ class EditalController extends Controller
         }
     }
 
+    public function emitir_certificados($edital_id){
+
+        $edital = Edital::findOrFails($edital_id);
+
+        $dadosEvento = [
+            'tipo_natureza' => 'Envio Externo SGPA',
+            'acao' => [
+                'titulo' => 'Envio Certificados SGPA 2023.2',
+                'data_inicio' => '2023-01-01',
+                'data_fim' => '2023-01-31'
+            ],
+            'atividades' => $edital->atividades->map(function ($atividade) {
+                return [
+                    'descricao' => $atividade->descricao,
+                    'data_inicio' => $atividade->data_inicio,
+                    'data_fim' => $atividade->data_fim,
+                    'participantes' => $atividade->participantes->map(function ($participante) {
+                        return [
+                            'cpf' => $participante->cpf,
+                            'passaporte' => $participante->passaporte,
+                            'email' => $participante->email,
+                            'nome' => $participante->nome,
+                            'carga_horaria' => $participante->carga_horaria,
+                            'instituicao' => $participante->instituicao,
+                            'curso' => $participante->curso,
+                            'disciplina' => $participante->disciplina,
+                            'orientador' => $participante->orientador,
+                            'periodo_letivo' => $participante->periodo_letivo,
+                            'area' => $participante->area,
+                            'local_realizado' => $participante->local_realizado,
+                            'titulo_projeto' => $participante->titulo_projeto
+                        ];
+                    })
+                ];
+            })
+        ];
+
+        // Retornar dados em formato JSON
+        return response()->json($dadosEvento);
+
+
+
+
+
+        if ($edital_id != 1){
+            return redirect(route('edital.index'))->withErrors( "Deve ser informado algum valor para o filtro." );
+        }
+
+        return redirect(route('edital.index'))->with('sucesso', 'Certificados emitidos com sucesso.');
+
+
+    }
+
 
 }
